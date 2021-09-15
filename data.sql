@@ -1,6 +1,10 @@
+CREATE DATABASE projet3;
+USE projet3;
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-    `id` INT  NOT NULL ,
-    `pseudonyme` VARCHAR(100)  NOT NULL ,
+    `id` INT AUTO_INCREMENT NOT NULL ,
+    `pseudonym` VARCHAR(100)  NOT NULL ,
+    `password` VARCHAR(100) NOT NULL,
     `firstname` VARCHAR(150)  NULL ,
     `lastname` VARCHAR(150) NULL ,
     `email` VARCHAR(100)  NOT NULL ,
@@ -9,7 +13,7 @@ CREATE TABLE `users` (
     `adress` VARCHAR(150)  NULL ,
     `socials` VARCHAR(150)  NULL ,
     `competences` VARCHAR(150) NULL ,
-    `desc` VARCHAR(1500) NULL ,
+    `description` VARCHAR(255) NULL ,
     `experience_points` INT NULL ,
     `projects_id` INT NULL ,
     `ideas_id` INT NULL ,
