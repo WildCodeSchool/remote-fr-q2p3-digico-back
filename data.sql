@@ -38,11 +38,11 @@ CREATE TABLE `projects` (
 );
 
 CREATE TABLE `ideas` (
-    `id` INT  NOT NULL ,
+    `id` INT AUTO_INCREMENT NOT NULL ,
     `title` VARCHAR(100)  NOT NULL ,
     `description` VARCHAR(840)  NOT NULL ,
     `img` VARCHAR(150) NULL ,
-    `idea_date` DATE  NOT NULL ,
+    `idea_date`DATE NOT NULL DEFAULT '0000-00-00' ,
     `owner_id` INT NOT NULL ,
     PRIMARY KEY (
         `id`
