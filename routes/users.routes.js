@@ -28,17 +28,16 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { username, password, email } = req.body;
-  connection.query(
-    'INSERT INTO users (username, password, email) VALUES (?, ?, ?)',
-    [username, password, email],
+  const { pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin } = req.body;
+  connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin) VALUES ?',
+    [pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the user');
       } else {
         const id = result.insertId;
-        const createdUser = { id, username, password, email };
+        const createdUser = { id, pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin };
         res.status(201).json(createdUser);
       }
     }
