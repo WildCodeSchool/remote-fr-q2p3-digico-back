@@ -81,6 +81,7 @@ CREATE TABLE `comments` (
     )
 );
 
+DROP TABLE IF EXIST `badges`;
 CREATE TABLE `badges` (
     `id` INT AUTO_INCREMENT NOT NULL ,
     `badge_name` VARCHAR(100)  NOT NULL ,
