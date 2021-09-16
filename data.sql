@@ -38,11 +38,12 @@ CREATE TABLE `projects` (
     )
 );
 
+DROP TABLE IF EXISTS `ideas`;
 CREATE TABLE `ideas` (
     `id` INT AUTO_INCREMENT NOT NULL ,
     `title` VARCHAR(100)  NOT NULL ,
     `description` VARCHAR(840)  NOT NULL ,
-    `img` VARCHAR(150) NULL ,
+    `img` VARCHs01
     `idea_date` DATE NOT NULL DEFAULT '0000-00-00' ,
     `owner_id` INT NOT NULL ,
     PRIMARY KEY (
@@ -50,9 +51,10 @@ CREATE TABLE `ideas` (
     )
 );
 
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
-    `id` INT  NOT NULL ,
-    `projects_id` INT  NOT NULL ,
+    `id` INT AUTO_INCREMENT NOT NULL ,
+    `project_id` INT  NOT NULL ,
     `idea_id` INT  NOT NULL ,
     `categorie` VARCHAR(150)  NOT NULL ,
     PRIMARY KEY (
@@ -61,7 +63,7 @@ CREATE TABLE `categories` (
 );
 
 CREATE TABLE `users_tags` (
-    `id` INT  NOT NULL ,
+    `id` INT AUTO_INCREMENT NOT NULL ,
     `tag_names` VARCHAR(100)  NOT NULL ,
     PRIMARY KEY (
         `id`
@@ -69,7 +71,7 @@ CREATE TABLE `users_tags` (
 );
 
 CREATE TABLE `comments` (
-    `id` INT  NOT NULL ,
+    `id` INT AUTO_INCREMENT NOT NULL ,
     `comment_content` VARCHAR(480)  NOT NULL ,
     `comment_date` DATE  NOT NULL ,
     `idea_id` INT  NOT NULL ,
@@ -105,7 +107,7 @@ CREATE TABLE `category_tag` (
 );
 
 CREATE TABLE `categories_tag` (
-    `id` INT NOT NULL,
+    `id` INT AUTO_INCREMENT NOT NULL,
     `category_tag_names` VARCHAR(100),
     PRIMARY KEY (
         `id`
