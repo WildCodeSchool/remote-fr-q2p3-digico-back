@@ -69,9 +69,9 @@ CREATE TABLE `users_tags` (
 );
 
 CREATE TABLE `comments` (
-    `id` INT  NOT NULL ,
+    `id` INT AUTO_INCREMENT NOT NULL ,
     `comment_content` VARCHAR(480)  NOT NULL ,
-    `comment_date` DATE  NOT NULL ,
+    `comment_date` DATE NOT NULL DEFAULT '0000-00-00' ,
     `idea_id` INT  NOT NULL ,
     `writer_id` INT  NOT NULL ,
     PRIMARY KEY (
