@@ -29,7 +29,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const { pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin } = req.body;
-  connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin) VALUES ?',
+  connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin],
     (err, result) => {
       if (err) {

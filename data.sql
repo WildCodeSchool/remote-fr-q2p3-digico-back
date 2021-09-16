@@ -13,7 +13,7 @@ CREATE TABLE `users` (
     `adress` VARCHAR(150)  NULL ,
     `socials` VARCHAR(150)  NULL ,
     `competences` VARCHAR(150) NULL ,
-    `description` VARCHAR(255) NULL ,
+    `description` VARCHAR(1500) NULL ,
     `experience_points` INT NULL ,
     `projects_id` INT NULL ,
     `ideas_id` INT NULL ,
@@ -23,14 +23,15 @@ CREATE TABLE `users` (
     )
 );
 
+DROP TABLE IF EXISTS `projects`;
 CREATE TABLE `projects` (
-    `id` INT  NOT NULL ,
+    `id` INT AUTO_INCREMENT NOT NULL ,
     `title` VARCHAR(100)  NOT NULL ,
-    `desc` VARCHAR(1500)  NOT NULL ,
+    `description` VARCHAR(1500)  NOT NULL ,
     `socials` VARCHAR(150) NULL ,
     `img` VARCHAR(150) NULL ,
     `localisation` VARCHAR(150) NULL ,
-    `project_date` DATE NOT NULL ,
+    `project_date` DATE NOT NULL DEFAULT '0000-00-00' ,
     `owner_id` INT NOT NULL ,
     PRIMARY KEY (
         `id`
@@ -40,9 +41,9 @@ CREATE TABLE `projects` (
 CREATE TABLE `ideas` (
     `id` INT  NOT NULL ,
     `title` VARCHAR(100)  NOT NULL ,
-    `desc` VARCHAR(840)  NOT NULL ,
+    `description` VARCHAR(840)  NOT NULL ,
     `img` VARCHAR(150) NULL ,
-    `idea_date` DATE  NOT NULL ,
+    `idea_date` DATE NOT NULL DEFAULT '0000-00-00' ,
     `owner_id` INT NOT NULL ,
     PRIMARY KEY (
         `id`
