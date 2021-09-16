@@ -91,23 +91,28 @@ CREATE TABLE `badges` (
     )
 );
 
+DROP TABLE IF EXISTS `user_badges`;
 CREATE TABLE `user_badges` (
     `badges_id` INT  NOT NULL ,
     `user_id` INT  NOT NULL 
 );
 
+DROP TABLE IF EXISTS `user_tag`
 CREATE TABLE `user_tag` (
     `tag_id` INT  NOT NULL ,
     `user_id` INT  NOT NULL 
 );
 
+DROP TABLE IF EXISTS `category_tag`
 CREATE TABLE `category_tag` (
     `categories_tag_id` INT  NOT NULL ,
     `categories_id` INT  NOT NULL 
 );
 
+DROP TABLE IF EXISTS `categories_tag`;
 CREATE TABLE `categories_tag` (
     `id` INT AUTO_INCREMENT NOT NULL,
+    `tag` VARCHAR(100),
     `category_tag_names` VARCHAR(100),
     PRIMARY KEY (
         `id`
