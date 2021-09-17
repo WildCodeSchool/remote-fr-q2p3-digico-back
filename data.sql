@@ -43,7 +43,7 @@ CREATE TABLE `ideas` (
     `id` INT AUTO_INCREMENT NOT NULL ,
     `title` VARCHAR(100)  NOT NULL ,
     `description` VARCHAR(840)  NOT NULL ,
-    `img` VARCHs01
+    `img` VARCHAR(250) NULL ,
     `idea_date` DATE NOT NULL DEFAULT '0000-00-00' ,
     `owner_id` INT NOT NULL ,
     PRIMARY KEY (
@@ -61,7 +61,7 @@ CREATE TABLE `categories` (
         `id`
     )
 );
-
+DROP TABLE IF EXISTS `users_tags`;
 CREATE TABLE `users_tags` (
     `id` INT AUTO_INCREMENT NOT NULL ,
     `tag_names` VARCHAR(100)  NOT NULL ,
@@ -70,6 +70,7 @@ CREATE TABLE `users_tags` (
     )
 );
 
+DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
     `id` INT AUTO_INCREMENT NOT NULL ,
     `comment_content` VARCHAR(480)  NOT NULL ,
@@ -81,7 +82,7 @@ CREATE TABLE `comments` (
     )
 );
 
-DROP TABLE IF EXIST `badges`;
+DROP TABLE IF EXISTS `badges`;
 CREATE TABLE `badges` (
     `id` INT AUTO_INCREMENT NOT NULL ,
     `badge_name` VARCHAR(100)  NOT NULL ,
@@ -125,7 +126,7 @@ REFERENCES `projects` (`id`);
 ALTER TABLE `users` ADD CONSTRAINT `fk_users_ideas_id` FOREIGN KEY(`ideas_id`)
 REFERENCES `ideas` (`id`);
 
-ALTER TABLE `categories` ADD CONSTRAINT `fk_categories_projects_id` FOREIGN KEY(`projects_id`)
+ALTER TABLE `categories` ADD CONSTRAINT `fk_categories_projects_id` FOREIGN KEY(`project_id`)
 REFERENCES `projects` (`id`);
 
 ALTER TABLE `categories` ADD CONSTRAINT `fk_categories_idea_id` FOREIGN KEY(`idea_id`)
