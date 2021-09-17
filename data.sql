@@ -69,7 +69,6 @@ CREATE TABLE `users_tags` (
         `id`
     )
 );
- 
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
     `id` INT AUTO_INCREMENT NOT NULL ,
@@ -81,7 +80,6 @@ CREATE TABLE `comments` (
         `id`
     )
 );
- 
 DROP TABLE IF EXISTS `badges`;
 CREATE TABLE `badges` (
     `id` INT AUTO_INCREMENT NOT NULL ,
@@ -125,7 +123,6 @@ REFERENCES `projects` (`id`);
  
 ALTER TABLE `users` ADD CONSTRAINT `fk_users_ideas_id` FOREIGN KEY(`ideas_id`)
 REFERENCES `ideas` (`id`);
- 
 ALTER TABLE `categories` ADD CONSTRAINT `fk_categories_projects_id` FOREIGN KEY(`project_id`)
 REFERENCES `projects` (`id`);
  
