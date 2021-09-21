@@ -2,7 +2,7 @@ const connection = require("../db-config");
 const router = require("express").Router();
 
 router.get('/', (req, res) => {
-    connection.query('SELECT * FROM categories_tag', (err, result) => {
+    connection.query('SELECT * FROM categoriy_tags', (err, result) => {
       if (err) {
         res.status(500).send('Error retrieving tag from database');
       } else {
@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   const category_tagId = req.params.id;
   connection.query(
-    'SELECT * FROM categories_tag WHERE id = ?',
+    'SELECT * FROM category_tags WHERE id = ?',
     [category_tagId],
     (err, results) => {
       if (err) {
@@ -30,7 +30,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   const { tag } = req.body;
   connection.query(
-    'INSERT INTO categories_tag (tag) VALUES ( ?)',
+    'INSERT INTO category_tags (category_tag_name) VALUES ( ?)',
     [tag],
     (err, result) => {
       if (err) {
@@ -49,11 +49,11 @@ router.put('/:id', (req, res) => {
   const categories_tagId = req.params.id;
   const db = connection.promise();
   let existingTag = null;
-  db.query('SELECT * FROM categories_tag WHERE id = ?', [categories_tagId])
+  db.query('SELECT * FROM category_tags WHERE id = ?', [categories_tagId])
     .then(([results]) => {
       existingTag = results[0];
       if (!existingTag) return Promise.reject('RECORD_NOT_FOUND');
-      return db.query('UPDATE categories_tag SET ? WHERE id = ?', [req.body, categories_tagId]);
+      return db.query('UPDATE category_tags SET ? WHERE id = ?', [req.body, categories_tagId]);
     })
     .then(() => {
       res.status(200).json({ ...existingTag, ...req.body });
@@ -68,7 +68,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   connection.query(
-    'DELETE FROM categories_tag WHERE id = ?',
+    'DELETE FROM category_tags WHERE id = ?',
     [req.params.id],
     (err, result) => {
       if (err) {

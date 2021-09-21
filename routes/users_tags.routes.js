@@ -28,17 +28,17 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { tag_names } = req.body;
+  const { tag_name } = req.body;
   connection.query(
-    'INSERT INTO users_tags (tag_names) VALUES (?)',
-    [tag_names],
+    'INSERT INTO users_tags (tag_name) VALUES (?)',
+    [tag_name],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the user_tag');
       } else {
         const id = result.insertId;
-        const createdUser_tag = { id, tag_names };
+        const createdUser_tag = { id, tag_name };
         res.status(201).json(createdUser_tag);
       }
     }

@@ -28,17 +28,17 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { comment_content, comment_date, idea_id, writer_id} = req.body;
+  const { comment_content, comment_date, idea_id, user_id} = req.body;
   connection.query(
-    'INSERT INTO comments (comment_content, comment_date, idea_id, writer_id) VALUES (?, ?, ?, ?)',
-    [comment_content, comment_date, idea_id, writer_id],
+    'INSERT INTO comments (comment_content, comment_date, idea_id, user_id) VALUES (?, ?, ?, ?)',
+    [comment_content, comment_date, idea_id, user_id],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the comment');
       } else {
         const id = result.insertId;
-        const createdComment = { id, comment_content, comment_date, idea_id, writer_id};
+        const createdComment = { id, comment_content, comment_date, idea_id, user_id};
         res.status(201).json(createdComment);
       }
     }

@@ -11,10 +11,21 @@ router.get('/', (req, res) => {
     });
   });
 
-router.get('/owner', (req, res) => {
-  connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=owner_id', (err, result) => {
+// router.get('/owner', (req, res) => {
+//   connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=user_id', (err, result) => {
+//     if (err) {
+//       res.status(500).send('Error retrieving ideas from database');
+//     } else {
+//       res.json(result);
+//     }
+//   });
+// });
+
+// Route sur les deux tables users -> ideas
+router.get('/ideaowner', (req, res) => {
+  connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=user_id', (err, result) => {
     if (err) {
-      res.status(500).send('Error retrieving ideas from database');
+      res.status(500).send('Error retrieving project from database');
     } else {
       res.json(result);
     }
@@ -38,16 +49,16 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { title, description, img, idea_date, owner_id } = req.body;
-  connection.query('INSERT INTO ideas (title, description, img, idea_date, owner_id) VALUES (?, ?, ?, ?, ?)',
-    [title, description, img, idea_date, owner_id],
+  const { title, description, img, idea_date, user_id } = req.body;
+  connection.query('INSERT INTO ideas (title, description, img, idea_date, user_id) VALUES (?, ?, ?, ?, ?)',
+    [title, description, img, idea_date, user_id],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the idea');
       } else {
         const id = result.insertId;
-        const createdIdea = {id, title, description, img, idea_date, owner_id};
+        const createdIdea = {id, title, description, img, idea_date, user_id};
         res.status(201).json(createdIdea);
       }
     }
