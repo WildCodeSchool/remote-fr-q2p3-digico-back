@@ -11,6 +11,17 @@ router.get('/', (req, res) => {
     });
   });
 
+  router.get('/owner', (req, res) => {
+    connection.query('SELECT title, d.description, img, project_date, pseudonym FROM projects d JOIN users ON users.id=owner_id', (err, result) => {
+      if (err) {
+        res.status(500).send('Error retrieving project from database');
+      } else {
+        res.json(result);
+      }
+    });
+  });
+
+
 router.get('/:id', (req, res) => {
   const projectId = req.params.id;
   connection.query(

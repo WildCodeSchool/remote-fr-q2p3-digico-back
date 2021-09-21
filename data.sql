@@ -149,3 +149,5 @@ REFERENCES `categories_tag` (`id`);
  
 ALTER TABLE `category_tag` ADD CONSTRAINT `fk_category_tag_categories_id` FOREIGN KEY(`categories_id`)
 REFERENCES `categories` (`id`);
+
+ALTER TABLE `ideas` ADD CONSTRAINT `fk_ideas_users_id` FOREIGN KEY(`owner_id`) REFERENCES `users` (`id`);
