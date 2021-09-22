@@ -1,3 +1,5 @@
+CREATE DATABASE projet3;
+USE projet3;
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
     `id` INT AUTO_INCREMENT NOT NULL ,
