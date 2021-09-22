@@ -11,15 +11,25 @@ router.get('/', (req, res) => {
     });
   });
 
-router.get('/owner', (req, res) => {
-  connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=owner_id', (err, result) => {
-    if (err) {
-      res.status(500).send('Error retrieving ideas from database');
-    } else {
-      res.json(result);
-    }
+  router.get('/owner', (req, res) => {
+    connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=owner_id', (err, result) => {
+      if (err) {
+        res.status(500).send('Error retrieving ideas from database');
+      } else {
+        res.json(result);
+      }
+    });
   });
-});
+
+  router.get('/ideas_comment', (req, res) => {
+    connection.query('SELECT title, d.description, img, idea_date, pseudonym, comment_content FROM users d JOIN ideas ON ideas.id=users.owner_id JOIN comments ON comments.id=users.writer_id', (err, result) => {
+      if (err) {
+        res.status(500).send('Error retrieving ideas from database');
+      } else {
+        res.json(result);
+      }
+    });
+  });
 
 router.get('/:id', (req, res) => {
   const ideaId = req.params.id;
