@@ -11,6 +11,17 @@ router.get('/', (req, res) => {
     });
   });
 
+// Route sur les 3 tables users -> ideas -> comments 
+router.get('/join_user_idea_comment', (req, res) => {
+  connection.query('SELECT pseudonym, title, comment_content FROM users JOIN ideas ON ideas.id=user_id JOIN comments ON comments.id=idea_id', (err, result) => {
+    if (err) {
+      res.status(500).send('Error retrieving users from database');
+    } else {
+      res.json(result);
+    }
+  });
+});  
+
 router.get('/:id', (req, res) => {
   const userId = req.params.id;
   connection.query(
@@ -28,21 +39,22 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin } = req.body;
-  connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin],
+  const { pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin } = req.body;
+  connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the user');
       } else {
         const id = result.insertId;
-        const createdUser = { id, pseudonym, password, firstname, lastname, email, mobile, user_img, adress, socials, competences, description, experience_points, projects_id, ideas_id, is_admin };
+        const createdUser = { id, pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin };
         res.status(201).json(createdUser);
       }
     }
   );
 });
+
 router.put('/:id', (req, res) => {
   const userId = req.params.id;
   const db = connection.promise();

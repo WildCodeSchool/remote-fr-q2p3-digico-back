@@ -28,17 +28,17 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { project_id, idea_id, categorie } = req.body;
+  const { project_id, idea_id, category_name } = req.body;
   connection.query(
-    'INSERT INTO categories (project_id, idea_id, categorie) VALUES ( ?, ?, ?)',
-    [project_id, idea_id, categorie],
+    'INSERT INTO categories (project_id, idea_id, category_name) VALUES ( ?, ?, ?)',
+    [project_id, idea_id, category_name],
     (err, result) => {
       if (err) {
         console.error(err);
-        res.status(500).send('Error saving the categorie');
+        res.status(500).send('Error saving the category');
       } else {
         const id = result.insertId;
-        const createdCategorie = { id, project_id, idea_id, categorie };
+        const createdCategorie = { id, project_id, idea_id, category_name };
         res.status(201).json(createdCategorie);
       }
     }
