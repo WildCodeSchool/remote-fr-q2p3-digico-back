@@ -30,7 +30,6 @@ router.get('/ideaowner', (req, res) => {
       res.json(result);
     }
   });
-});
 
 router.get('/:id', (req, res) => {
   const ideaId = req.params.id;
