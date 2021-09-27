@@ -1,5 +1,6 @@
 const connection = require("../db-config");
 const router = require("express").Router();
+const { check, validationResult } = require('express-validator');
 
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM users', (err, result) => {
@@ -38,7 +39,14 @@ router.get('/:id', (req, res) => {
   );
 });
 
-router.post('/', (req, res) => {
+const loginValidate = [
+  check('email', 'Email Must Be a Valid Email Address').isEmail().normalizeEmail(),
+  check('password').isLength({ min: 8 })
+    .withMessage('Password Must Be at Least 8 Characters')
+    .matches('[0-9]').withMessage('Password Must Contain a Number')
+    .matches('[A-Z]').withMessage('Password Must Contain an Uppercase Letter')];
+
+router.post('/', loginValidate, (req, res) => {
   const { pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin } = req.body;
   connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin],
