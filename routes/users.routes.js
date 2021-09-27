@@ -44,10 +44,14 @@ const loginValidate = [
   check('password').isLength({ min: 8 })
     .withMessage('Password Must Be at Least 8 Characters')
     .matches('[0-9]').withMessage('Password Must Contain a Number')
-    .matches('[A-Z]').withMessage('Password Must Contain an Uppercase Letter')];
+    .matches('[A-Z]').withMessage('Password Must Contain an Uppercase Letter'),
+  check ('mobile').isNumeric()
+];
 
+/* à modifier : la const avec les variables dont j'ai besoin qui sont renvoyés par le formulaire et ensuite dans le tableau de valeur de la query
+ il faut remplacer les variables qui n'existent pas par des NULL*/
 router.post('/', loginValidate, (req, res) => {
-  const { pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin } = req.body;
+  const { pseudonym, email, mobile, password, firstname, lastname, user_img, address, socials, skills, description, experience_points, is_admin } = req.body;
   connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin],
     (err, result) => {
@@ -63,6 +67,7 @@ router.post('/', loginValidate, (req, res) => {
   );
 });
 
+/* à modifier ici pour quand utilisateur modifie ses informations */
 router.put('/:id', (req, res) => {
   const userId = req.params.id;
   const db = connection.promise();
