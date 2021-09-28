@@ -51,16 +51,17 @@ const loginValidate = [
 /* à modifier : la const avec les variables dont j'ai besoin qui sont renvoyés par le formulaire et ensuite dans le tableau de valeur de la query
  il faut remplacer les variables qui n'existent pas par des NULL*/
 router.post('/', loginValidate, (req, res) => {
-  const { pseudonym, email, mobile, password, firstname, lastname, user_img, address, socials, skills, description, experience_points, is_admin } = req.body;
+  const { pseudonym, password, email } = req.body;
+  const mobile = 'mobile in req.body' ? req.body['mobile'] : null;
   connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin],
+    [pseudonym, password, NULL, NULL, email, mobile, NULL, NULL, NULL, NULL, NULL, NULL, NULL],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the user');
       } else {
         const id = result.insertId;
-        const createdUser = { id, pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin };
+        const createdUser = { id, pseudonym, password, email, mobile };
         res.status(201).json(createdUser);
       }
     }
@@ -68,7 +69,7 @@ router.post('/', loginValidate, (req, res) => {
 });
 
 /* à modifier ici pour quand utilisateur modifie ses informations */
-router.put('/:id', (req, res) => {
+router.put('/:id', loginValidate, (req, res) => {
   const userId = req.params.id;
   const db = connection.promise();
   let existingUser = null;
