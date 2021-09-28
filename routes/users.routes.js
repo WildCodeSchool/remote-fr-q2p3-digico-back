@@ -1,5 +1,6 @@
 const connection = require("../db-config");
 const router = require("express").Router();
+const { check, validationResult } = require('express-validator');
 
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM users', (err, result) => {
@@ -38,8 +39,36 @@ router.get('/:id', (req, res) => {
   );
 });
 
-router.post('/', (req, res) => {
-  const { pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin } = req.body;
+const loginValidate = [
+  check('email', 'Email Must Be a Valid Email Address').isEmail().normalizeEmail(),
+  check('password').isLength({ min: 8 })
+    .withMessage('Password Must Be at Least 8 Characters')
+    .matches('[0-9]').withMessage('Password Must Contain a Number')
+    .matches('[A-Z]').withMessage('Password Must Contain an Uppercase Letter'),
+  check ('mobile').isNumeric()
+];
+
+/* à modifier : la const avec les variables dont j'ai besoin qui sont renvoyés par le formulaire et ensuite dans le tableau de valeur de la query
+ il faut remplacer les variables qui n'existent pas par des NULL*/
+ router.post('/', loginValidate, (req, res) => {
+  const { pseudonym, password, email, mobile } = req.body;
+  connection.query('INSERT INTO users (pseudonym, password, email, mobile) VALUES (?, ?, ?, ?)',
+    [pseudonym, password, email, mobile],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error saving the user');
+      } else {
+        const id = result.insertId;
+        const createdUser = { id, pseudonym, password, email, mobile };
+        res.status(201).json(createdUser);
+      }
+    }
+  );
+});
+
+router.post('/complete', loginValidate, (req, res) => {
+  const { pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin} = req.body;
   connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin],
     (err, result) => {
@@ -48,14 +77,15 @@ router.post('/', (req, res) => {
         res.status(500).send('Error saving the user');
       } else {
         const id = result.insertId;
-        const createdUser = { id, pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin };
+        const createdUser = {id, pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin};
         res.status(201).json(createdUser);
       }
     }
   );
 });
 
-router.put('/:id', (req, res) => {
+/* à modifier ici pour quand utilisateur modifie ses informations */
+router.put('/:id', loginValidate, (req, res) => {
   const userId = req.params.id;
   const db = connection.promise();
   let existingUser = null;
