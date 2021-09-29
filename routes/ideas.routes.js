@@ -1,6 +1,6 @@
 const connection = require("../db-config");
 const router = require("express").Router();
-
+ 
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM ideas', (err, result) => {
       if (err) {
@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
       }
     });
   });
-
+ 
 // router.get('/owner', (req, res) => {
 //   connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=user_id', (err, result) => {
 //     if (err) {
@@ -20,17 +20,18 @@ router.get('/', (req, res) => {
 //     }
 //   });
 // });
-
+ 
 // Route sur les deux tables users -> ideas
 router.get('/ideaowner', (req, res) => {
-  connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=user_id', (err, result) => {
+  connection.query('SELECT title, d.description, img, socials, idea_date, pseudonym, comment_content, comment_date FROM ideas d JOIN users ON users.id=user_id' , (err, result) => {
     if (err) {
       res.status(500).send('Error retrieving project from database');
     } else {
       res.json(result);
     }
   });
-
+});
+ 
 router.get('/:id', (req, res) => {
   const ideaId = req.params.id;
   connection.query(
@@ -46,24 +47,24 @@ router.get('/:id', (req, res) => {
     }
   );
 });
-
+ 
 router.post('/', (req, res) => {
-  const { title, description, img, idea_date, user_id } = req.body;
-  connection.query('INSERT INTO ideas (title, description, img, idea_date, user_id) VALUES (?, ?, ?, ?, ?)',
-    [title, description, img, idea_date, user_id],
+  const { title, description, img, socials, idea_date, user_id } = req.body;
+  connection.query('INSERT INTO ideas (title, description, img, socials, idea_date, user_id) VALUES (?, ?, ?, ?, ?,?)',
+    [title, description, img, socials, idea_date, user_id],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the idea');
       } else {
         const id = result.insertId;
-        const createdIdea = {id, title, description, img, idea_date, user_id};
+        const createdIdea = {id, title, description, img, socials, idea_date, user_id};
         res.status(201).json(createdIdea);
       }
     }
   );
 });
-
+ 
 router.put('/:id', (req, res) => {
   const ideaId = req.params.id;
   const db = connection.promise();
@@ -84,7 +85,7 @@ router.put('/:id', (req, res) => {
       else res.status(500).send('Error updating a idea');
     });
 });
-
+ 
 router.delete('/:id', (req, res) => {
   connection.query(
     'DELETE FROM ideas WHERE id = ?',
@@ -100,7 +101,5 @@ router.delete('/:id', (req, res) => {
     }
   );
 });
-
-module.exports = router;
-
-// title, description, img, idea_date, pseudonym FROM ideas JOIN users ON users.id=ideas.owner_id 
+ 
+module.exports = router; 
