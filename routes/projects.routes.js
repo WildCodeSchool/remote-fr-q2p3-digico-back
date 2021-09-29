@@ -21,9 +21,9 @@ router.get('/', (req, res) => {
 //   });
 // });
 
-// Route sur les deux tables users -> projects
+// Route sur les deux tables users -> ||  projects title, d.description, img, id, project_date, claps
 router.get('/projectowner', (req, res) => {
-  connection.query('SELECT title, d.description, img, project_date, pseudonym FROM projects d JOIN users ON users.id=user_id', (err, result) => {
+  connection.query('SELECT p.*, p.description, u.pseudonym FROM projects p JOIN users u ON u.id=p.user_id', (err, result) => {
     if (err) {
       res.status(500).send('Error retrieving project from database');
     } else {
@@ -49,16 +49,16 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { title, description, socials, img, localisation, project_date, user_id } = req.body;
-  connection.query('INSERT INTO projects (title, description, socials, img, localisation, project_date, user_id) VALUES ( ?, ?, ?, ?, ?, ?, ?)',
-    [title, description, socials, img, localisation, project_date, user_id],
+  const { title, description, socials, img, localisation, project_date, claps, user_id } = req.body;
+  connection.query('INSERT INTO projects (title, description, socials, img, localisation, project_date, claps, user_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)',
+    [title, description, socials, img, localisation, project_date, claps, user_id],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the project');
       } else {
         const id = result.insertId;
-        const createdProject = { id, title, description, socials, img, localisation, project_date, user_id };
+        const createdProject = {id, title, description, socials, img, localisation, project_date, claps, user_id };
         res.status(201).json(createdProject);
       }
     }

@@ -153,3 +153,5 @@ REFERENCES `category_tags` (`id`);
 
 ALTER TABLE `category_tag` ADD CONSTRAINT `fk_category_tag_category_id` FOREIGN KEY(`category_id`)
 REFERENCES `categories` (`id`);
+
+ALTER TABLE `projets` ADD claps INT NULL AFTER project_date;
