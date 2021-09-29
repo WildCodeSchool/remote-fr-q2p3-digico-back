@@ -48,9 +48,7 @@ const loginValidate = [
   check ('mobile').isNumeric()
 ];
 
-/* à modifier : la const avec les variables dont j'ai besoin qui sont renvoyés par le formulaire et ensuite dans le tableau de valeur de la query
- il faut remplacer les variables qui n'existent pas par des NULL*/
- router.post('/', loginValidate, (req, res) => {
+ router.post('/register', loginValidate, (req, res) => {
   const { pseudonym, password, email, mobile } = req.body;
   connection.query('INSERT INTO users (pseudonym, password, email, mobile) VALUES (?, ?, ?, ?)',
     [pseudonym, password, email, mobile],
@@ -84,7 +82,6 @@ router.post('/complete', loginValidate, (req, res) => {
   );
 });
 
-/* à modifier ici pour quand utilisateur modifie ses informations */
 router.put('/:id', loginValidate, (req, res) => {
   const userId = req.params.id;
   const db = connection.promise();
