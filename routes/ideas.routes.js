@@ -10,27 +10,16 @@ router.get('/', (req, res) => {
       }
     });
   });
- 
-// router.get('/owner', (req, res) => {
-//   connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=user_id', (err, result) => {
-//     if (err) {
-//       res.status(500).send('Error retrieving ideas from database');
-//     } else {
-//       res.json(result);
-//     }
-//   });
-// });
- 
-// Route sur les deux tables users -> ideas
-router.get('/ideaowner', (req, res) => {
-  connection.query('SELECT title, d.description, img, socials, idea_date, pseudonym, comment_content, comment_date FROM ideas d JOIN users ON users.id=user_id' , (err, result) => {
-    if (err) {
-      res.status(500).send('Error retrieving project from database');
-    } else {
-      res.json(result);
-    }
+
+  router.get('/ideaowner', (req, res) => {
+    connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=user_id', (err, result) => {
+      if (err) {
+        res.status(500).send('Error retrieving project from database');
+      } else {
+        res.json(result);
+      }
+    });
   });
-});
  
 router.get('/:id', (req, res) => {
   const ideaId = req.params.id;
