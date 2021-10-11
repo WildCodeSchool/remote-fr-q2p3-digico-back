@@ -27,7 +27,7 @@ CREATE TABLE `projects` (
     `title` VARCHAR(100)  NOT NULL ,
     `description` VARCHAR(1500)  NOT NULL ,
     `socials` VARCHAR(150)  NULL ,
-    `img` VARCHAR(150)  NOT NULL ,
+    `img` VARCHAR(455)  NOT NULL ,
     `localisation` VARCHAR(150)  NULL ,
     `project_date` DATE  NOT NULL DEFAULT '0000-00-00',
     `user_id` INT  NOT NULL ,
@@ -153,3 +153,5 @@ REFERENCES `category_tags` (`id`);
 
 ALTER TABLE `category_tag` ADD CONSTRAINT `fk_category_tag_category_id` FOREIGN KEY(`category_id`)
 REFERENCES `categories` (`id`);
+
+ALTER TABLE `projets` ADD claps INT NULL AFTER project_date;
