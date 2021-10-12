@@ -20,7 +20,6 @@ router.get('/', (req, res) => {
       }
     });
   });
-})
 
 router.get('/:id', (req, res) => {
   const ideaId = req.params.id;

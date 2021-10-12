@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 
 // Route sur les deux tables users -> projects
 router.get('/projectowner', (req, res) => {
-  connection.query('SELECT title, d.description, img, project_date, pseudonym FROM projects d JOIN users ON users.id=user_id', (err, result) => {
+  connection.query('SELECT title, d.description, img, project_date, claps, pseudonym FROM projects d JOIN users ON users.id=user_id', (err, result) => {
     if (err) {
       res.status(500).send('Error retrieving project from database');
     } else {
@@ -64,6 +64,24 @@ router.post('/', (req, res) => {
     }
   );
 });
+
+router.post('/upload', (req, res) => {
+  if (req.files === null) {
+    return res.status(400).json({ msg: 'No file uploaded' });
+  }
+
+  const file = req.files.file;
+
+  file.mv(`${__dirname}/../../remote-fr-q2p3-digico-front/public/assets/projects/${file.name}`, err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    res.json({ fileName: file.name, filePath: `/assets/projects/${file.name}` });
+  });
+});
+
 
 router.put('/:id', (req, res) => {
   const projectId = req.params.id;
