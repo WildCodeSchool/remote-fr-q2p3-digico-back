@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
   });
 
   router.get('/ideaowner', (req, res) => {
-    connection.query('SELECT title, d.description, img, idea_date, pseudonym FROM ideas d JOIN users ON users.id=user_id', (err, result) => {
+    connection.query('SELECT i.*, i.title, i.category, i.description, i.img, i.idea_date, u.pseudonym FROM ideas i JOIN users u ON u.id=i.user_id', (err, result) => {
       if (err) {
         res.status(500).send('Error retrieving project from database');
       } else {
@@ -38,21 +38,38 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { title, description, img, idea_date, user_id } = req.body;
-  connection.query('INSERT INTO ideas (title, description, img, idea_date, user_id) VALUES (?, ?, ?, ?, ?)',
-    [title, description, img, idea_date, user_id],
+  const { title, category, description, img, idea_date, user_id } = req.body;
+  connection.query('INSERT INTO ideas (title, category, description, idea_date, user_id) VALUES (?, ?, ?, ?, ?)',
+    [title, category, description, idea_date, user_id],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the idea');
       } else {
         const id = result.insertId;
-        const createdIdea = {id, title, description, img, idea_date, user_id};
+        const createdIdea = {id, title, category, description, idea_date, user_id};
         res.status(201).json(createdIdea);
       }
     }
   );
 });
+
+// router.post('/upload', (req, res) => {
+//   if (req.files === null) {
+//     return res.status(400).json({ msg: 'No file uploaded' });
+//   }
+ 
+//   const file = req.files.file;
+ 
+//   file.mv(`${__dirname}/../remote-fr-q2p3-digico-front/public/assets/ideas/${file.name}`, err => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).send(err);
+//     }
+ 
+//     res.json({ fileName: file.name, filePath: `/assets/ideas${file.name}` });
+//   });
+// });
 
 router.put('/:id', (req, res) => {
   const ideaId = req.params.id;
