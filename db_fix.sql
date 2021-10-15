@@ -158,4 +158,5 @@ ALTER TABLE `projects` ADD claps INT NULL AFTER project_date;
 ALTER TABLE `projects` ADD contributors INT NULL AFTER claps;
 ALTER TABLE `projects` MODIFY COLUMN project_date VARCHAR(80) NOT NULL;
 ALTER TABLE `projects` ADD category VARCHAR(32) NOT NULL AFTER claps;
+ALTER TABLE `ideas` ADD category VARCHAR(32) NOT NULL;
 ALTER TABLE `ideas` MODIFY COLUMN idea_date VARCHAR(80) NOT NULL;
