@@ -119,4 +119,22 @@ router.delete('/:id', (req, res) => {
   );
 });
 
+// Préparation de routes pour le user profile
+
+router.get('/:id/projects', (req, res) => {
+  const projectId = req.params.id;
+  connection.query(
+    'SELECT p.*, p.description, u.pseudonym FROM projects p JOIN users u ON u.id=p.user_id',
+    [projectId],
+    (err, results) => {
+      if (err) {
+        res.status(500).send('Error retrieving projects from database');
+      } else {
+        if (results.length) res.json(results[0]);
+        else res.status(404).send('Projects not found');
+      }
+    }
+  );
+});
+
 module.exports = router;
