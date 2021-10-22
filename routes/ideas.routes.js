@@ -37,6 +37,38 @@ router.get('/:id', (req, res) => {
   );
 });
 
+router.get('/:id/comments', (req, res) => {
+  const commentId = req.params.id;
+  connection.query(
+    'SELECT i.id, c.*, c.idea_id, c.user_id, c.comment_content, c.comment_date, u.pseudonym FROM comments c JOIN ideas i ON i.id=c.idea_id JOIN users u ON u.id=c.user_id WHERE i.id = ?',
+    [commentId],
+    (err, results) => {
+      if (err) {
+        res.status(500).send('Error retrieving comment from database');
+      } else {
+        if (results.length) res.json(results[0]);
+        else res.status(404).send('Comment not found');
+      }
+    }
+  );
+});
+
+// router.get('/:id/comments', (req, res) => {
+//   const ideaId = req.params.id;
+//   connection.query(
+//     'SELECT i.*, i.title, i.category, i.description, i.img, i.idea_date, u.pseudonym, c.comment_content, c.comment_date FROM ideas i JOIN users u ON u.id=i.user_id JOIN comments c ON c.id',
+//         [ideaId],
+//     (err, results) => {
+//       if (err) {
+//         res.status(500).send('Error retrieving idea from database');
+//       } else {
+//         if (results.length) res.json(results[0]);
+//         else res.status(404).send('idea not found');
+//       }
+//     }
+//   );
+// });
+
 router.post('/', (req, res) => {
   const { title, category, description, img, idea_date, user_id } = req.body;
   connection.query('INSERT INTO ideas (title, category, description, idea_date, user_id) VALUES (?, ?, ?, ?, ?)',
