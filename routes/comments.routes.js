@@ -11,16 +11,6 @@ router.get('/', (req, res) => {
     });
   });
 
-  router.get('/writer', (req, res) => {
-    connection.query('SELECT comment_content, comment_date, pseudonym FROM comments JOIN users ON users.id=writer_id JOIN ideas ON ideas.id=idea_id', (err, result) => {
-      if (err) {
-        res.status(500).send('Error retrieving comments from database');
-      } else {
-        res.json(result);
-      }
-    });
-  });
-
 router.get('/:id', (req, res) => {
   const commentId = req.params.id;
   connection.query(
