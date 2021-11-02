@@ -119,4 +119,38 @@ router.delete('/:id', (req, res) => {
   );
 });
 
+// Préparation de routes pour le user profile
+
+router.get('/:id/projects', (req, res) => {
+  const userId = req.params.id;
+  connection.query(
+    'SELECT p.*, p.description, u.pseudonym FROM projects p JOIN users u ON u.id=p.user_id WHERE p.user_id=?',
+    [userId],
+    (err, results) => {
+      if (err) {
+        res.status(500).send('Error retrieving projects from database');
+      } else {
+        if (results.length) res.json(results);
+        else res.status(404).send('Projects not found');
+      }
+    }
+  );
+});
+
+router.get('/:id/ideas', (req, res) => {
+  const userId = req.params.id;
+  connection.query(
+    'SELECT i.*, i.description, u.pseudonym FROM ideas i JOIN users u ON u.id=i.user_id WHERE i.user_id=?',
+    [userId],
+    (err, results) => {
+      if (err) {
+        res.status(500).send('Error retrieving ideas from database');
+      } else {
+        if (results.length) res.json(results);
+        else res.status(404).send('Ideas not found');
+      }
+    }
+  );
+});
+
 module.exports = router;

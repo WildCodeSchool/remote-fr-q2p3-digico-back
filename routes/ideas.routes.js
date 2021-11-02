@@ -1,6 +1,6 @@
 const connection = require("../db-config");
 const router = require("express").Router();
-
+ 
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM ideas', (err, result) => {
       if (err) {
@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
       }
     });
   });
-
+ 
 router.get('/:id', (req, res) => {
   const ideaId = req.params.id;
   connection.query(
@@ -107,7 +107,7 @@ router.put('/:id', (req, res) => {
       else res.status(500).send('Error updating a idea');
     });
 });
-
+ 
 router.delete('/:id', (req, res) => {
   connection.query(
     'DELETE FROM ideas WHERE id = ?',
@@ -123,7 +123,5 @@ router.delete('/:id', (req, res) => {
     }
   );
 });
-
-module.exports = router;
-
-// title, description, img, idea_date, pseudonym FROM ideas JOIN users ON users.id=ideas.owner_id 
+ 
+module.exports = router; 
