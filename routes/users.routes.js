@@ -1,5 +1,6 @@
 const connection = require("../db-config");
 const router = require("express").Router();
+const { check, validationResult } = require('express-validator');
 
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM users', (err, result) => {
@@ -10,6 +11,17 @@ router.get('/', (req, res) => {
       }
     });
   });
+
+// Route sur les 3 tables users -> ideas -> comments 
+router.get('/join_user_idea_comment', (req, res) => {
+  connection.query('SELECT pseudonym, title, comment_content FROM users JOIN ideas ON ideas.id=user_id JOIN comments ON comments.id=idea_id', (err, result) => {
+    if (err) {
+      res.status(500).send('Error retrieving users from database');
+    } else {
+      res.json(result);
+    }
+  });
+});  
 
 router.get('/:id', (req, res) => {
   const userId = req.params.id;
@@ -37,16 +49,16 @@ const loginValidate = [
 ];
 
  router.post('/register', loginValidate, (req, res) => {
-  const { email, password,confirm_password } = req.body;
-  connection.query('INSERT INTO users (email, password,confirm_password ) VALUES (?, ?, ?)',
-    [email, password,confirm_password ],
+  const { pseudonym, email, password,confirm_password } = req.body;
+  connection.query('INSERT INTO users (pseudonym, email, password, confirm_password ) VALUES (?, ?, ?, ?)',
+    [pseudonym, email, password,confirm_password ],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the user');
       } else {
         const id = result.insertId;
-        const createdUser = { id, email, password,confirm_password };
+        const createdUser = { id, pseudonym, email, password,confirm_password };
         res.status(201).json(createdUser);
       }
     }
@@ -63,7 +75,7 @@ router.post('/complete', loginValidate, (req, res) => {
         res.status(500).send('Error saving the user');
       } else {
         const id = result.insertId;
-        const createdUser = { id, username, password, email };
+        const createdUser = {id, pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin};
         res.status(201).json(createdUser);
       }
     }

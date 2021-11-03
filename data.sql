@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 CREATE DATABASE projet3;
 USE projet3;
 DROP TABLE IF EXISTS `users`;
@@ -151,21 +150,3 @@ REFERENCES `categories_tag` (`id`);
  
 ALTER TABLE `category_tag` ADD CONSTRAINT `fk_category_tag_categories_id` FOREIGN KEY(`categories_id`)
 REFERENCES `categories` (`id`);
-=======
-DROP TABLE IF EXISTS users;
-
-CREATE TABLE users (
-    id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    username varchar(255) NOT NULL,
-    password varchar(255) NOT NULL,
-    email varchar(255) NOT NULL
-);
-
-INSERT INTO users
-VALUES (
-    1,
-    'admin',
-    'test',
-    'admin@example.com'
-);
->>>>>>> cc2820076661c11fbd4dfc383ed5fc5961abed57
