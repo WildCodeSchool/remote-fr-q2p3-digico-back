@@ -1,6 +1,5 @@
 const connection = require("../db-config");
 const router = require("express").Router();
-const { check, validationResult } = require('express-validator');
 
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM users', (err, result) => {
@@ -11,17 +10,6 @@ router.get('/', (req, res) => {
       }
     });
   });
-
-// Route sur les 3 tables users -> ideas -> comments 
-router.get('/join_user_idea_comment', (req, res) => {
-  connection.query('SELECT pseudonym, title, comment_content FROM users JOIN ideas ON ideas.id=user_id JOIN comments ON comments.id=idea_id', (err, result) => {
-    if (err) {
-      res.status(500).send('Error retrieving users from database');
-    } else {
-      res.json(result);
-    }
-  });
-});  
 
 router.get('/:id', (req, res) => {
   const userId = req.params.id;
@@ -75,7 +63,7 @@ router.post('/complete', loginValidate, (req, res) => {
         res.status(500).send('Error saving the user');
       } else {
         const id = result.insertId;
-        const createdUser = {id, pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin};
+        const createdUser = { id, username, password, email };
         res.status(201).json(createdUser);
       }
     }
