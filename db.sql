@@ -3,13 +3,13 @@ USE projet3;
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
     `id` INT AUTO_INCREMENT NOT NULL ,
-    `pseudonym` VARCHAR(100)  NOT NULL, 
+    `pseudonym` VARCHAR(100) NOT NULL, 
     `password` VARCHAR(100) NOT NULL,
-    `confirm_password` (100) NOT NULL,
-    `firstname` VARCHAR(150)  NOT NULL ,
+    `confirm_password` VARCHAR(100) NOT NULL,
+    `firstname` VARCHAR(150)  NULL ,
     `lastname` VARCHAR(150)  NULL ,
     `email` VARCHAR(100)  NOT NULL ,
-    `mobile` VARCHAR(100)  NOT NULL ,
+    `mobile` VARCHAR(100) NULL ,
     `user_img` VARCHAR(250)  NULL ,
     `address` VARCHAR(150)  NULL ,
     `socials` VARCHAR(150)  NULL ,
@@ -159,12 +159,3 @@ REFERENCES `category_tags` (`id`);
 
 ALTER TABLE `category_tag` ADD CONSTRAINT `fk_category_tag_category_id` FOREIGN KEY(`category_id`)
 REFERENCES `categories` (`id`);
-
-
-ALTER TABLE `projects` ADD claps INT NULL AFTER project_date;
-ALTER TABLE `projects` ADD contributors INT NULL AFTER claps;
-ALTER TABLE `projects` MODIFY COLUMN project_date VARCHAR(80) NOT NULL;
-ALTER TABLE `projects` ADD category VARCHAR(32) NOT NULL AFTER claps;
-ALTER TABLE `ideas` ADD category VARCHAR(32) NOT NULL;
-ALTER TABLE `ideas` MODIFY COLUMN idea_date VARCHAR(80) NOT NULL;
-ALTER TABLE `comments` MODIFY COLUMN comment_date VARCHAR(80) NOT NULL;

@@ -49,16 +49,16 @@ const loginValidate = [
 ];
 
  router.post('/register', loginValidate, (req, res) => {
-  const { email, password,confirm_password } = req.body;
-  connection.query('INSERT INTO users (email, password,confirm_password ) VALUES (?, ?, ?)',
-    [email, password,confirm_password ],
+  const { pseudonym, email, password,confirm_password } = req.body;
+  connection.query('INSERT INTO users (pseudonym, email, password, confirm_password ) VALUES (?, ?, ?, ?)',
+    [pseudonym, email, password,confirm_password ],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the user');
       } else {
         const id = result.insertId;
-        const createdUser = { id, email, password,confirm_password };
+        const createdUser = { id, pseudonym, email, password,confirm_password };
         res.status(201).json(createdUser);
       }
     }
