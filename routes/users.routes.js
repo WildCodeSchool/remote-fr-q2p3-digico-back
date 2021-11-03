@@ -1,5 +1,6 @@
 const connection = require("../db-config");
 const router = require("express").Router();
+const { check, validationResult } = require('express-validator');
 
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM users', (err, result) => {
@@ -10,6 +11,17 @@ router.get('/', (req, res) => {
       }
     });
   });
+
+// Route sur les 3 tables users -> ideas -> comments 
+router.get('/join_user_idea_comment', (req, res) => {
+  connection.query('SELECT pseudonym, title, comment_content FROM users JOIN ideas ON ideas.id=user_id JOIN comments ON comments.id=idea_id', (err, result) => {
+    if (err) {
+      res.status(500).send('Error retrieving users from database');
+    } else {
+      res.json(result);
+    }
+  });
+});  
 
 router.get('/:id', (req, res) => {
   const userId = req.params.id;
@@ -27,25 +39,50 @@ router.get('/:id', (req, res) => {
   );
 });
 
-router.post('/', (req, res) => {
-  const { username, password, email } = req.body;
-  connection.query(
-    'INSERT INTO users (username, password, email) VALUES (?, ?, ?)',
-    [username, password, email],
+const loginValidate = [
+  check('email', 'Email Must Be a Valid Email Address').isEmail().normalizeEmail(),
+  check('password').isLength({ min: 8 })
+    .withMessage('Password Must Be at Least 8 Characters')
+    .matches('[0-9]').withMessage('Password Must Contain a Number')
+    .matches('[A-Z]').withMessage('Password Must Contain an Uppercase Letter'),
+  check ('mobile').isNumeric()
+];
+
+ router.post('/register', loginValidate, (req, res) => {
+  const { email, password,confirm_password } = req.body;
+  connection.query('INSERT INTO users (email, password,confirm_password ) VALUES (?, ?, ?)',
+    [email, password,confirm_password ],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error saving the user');
       } else {
         const id = result.insertId;
-        const createdUser = { id, username, password, email };
+        const createdUser = { id, email, password,confirm_password };
         res.status(201).json(createdUser);
       }
     }
   );
 });
 
-router.put('/:id', (req, res) => {
+router.post('/complete', loginValidate, (req, res) => {
+  const { pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin} = req.body;
+  connection.query('INSERT INTO users (pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error saving the user');
+      } else {
+        const id = result.insertId;
+        const createdUser = {id, pseudonym, password, firstname, lastname, email, mobile, user_img, address, socials, skills, description, experience_points, is_admin};
+        res.status(201).json(createdUser);
+      }
+    }
+  );
+});
+
+router.put('/:id', loginValidate, (req, res) => {
   const userId = req.params.id;
   const db = connection.promise();
   let existingUser = null;
@@ -77,6 +114,40 @@ router.delete('/:id', (req, res) => {
       } else {
         if (result.affectedRows) res.status(200).send('🎉 User deleted!');
         else res.status(404).send('User not found.');
+      }
+    }
+  );
+});
+
+// Préparation de routes pour le user profile
+
+router.get('/:id/projects', (req, res) => {
+  const userId = req.params.id;
+  connection.query(
+    'SELECT p.*, p.description, u.pseudonym FROM projects p JOIN users u ON u.id=p.user_id WHERE p.user_id=?',
+    [userId],
+    (err, results) => {
+      if (err) {
+        res.status(500).send('Error retrieving projects from database');
+      } else {
+        if (results.length) res.json(results);
+        else res.status(404).send('Projects not found');
+      }
+    }
+  );
+});
+
+router.get('/:id/ideas', (req, res) => {
+  const userId = req.params.id;
+  connection.query(
+    'SELECT i.*, i.description, u.pseudonym FROM ideas i JOIN users u ON u.id=i.user_id WHERE i.user_id=?',
+    [userId],
+    (err, results) => {
+      if (err) {
+        res.status(500).send('Error retrieving ideas from database');
+      } else {
+        if (results.length) res.json(results);
+        else res.status(404).send('Ideas not found');
       }
     }
   );
