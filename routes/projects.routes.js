@@ -11,17 +11,6 @@ router.get('/', (req, res) => {
     });
   });
 
-// router.get('/owner', (req, res) => {
-//   connection.query('SELECT title, d.description, img, project_date, pseudonym FROM users d JOIN projects ON projects.id=user_id', (err, result) => {
-//     if (err) {
-//       res.status(500).send('Error retrieving project from database');
-//     } else {
-//       res.json(result);
-//     }
-//   });
-// });
-
-// Route sur les deux tables users -> ||  projects title, d.description, img, id, project_date, claps
 router.get('/projectowner', (req, res) => {
   connection.query('SELECT p.*, p.description, u.pseudonym FROM projects p JOIN users u ON u.id=p.user_id', (err, result) => {
     if (err) {
@@ -36,7 +25,7 @@ router.get('/projectowner', (req, res) => {
 router.get('/projectowner/:id', (req, res) => {
   const projectId = req.params.id;
   connection.query(
-    'SELECT p.*, p.description, u.pseudonym FROM projects p JOIN users u ON u.id=p.user_id',
+    'SELECT * FROM projects p WHERE id = ?',
     [projectId],
     (err, results) => {
       if (err) {
@@ -48,6 +37,7 @@ router.get('/projectowner/:id', (req, res) => {
     }
   );
 });
+
 router.get('/:id', (req, res) => {
   const projectId = req.params.id;
   connection.query(
